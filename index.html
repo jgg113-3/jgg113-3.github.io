@@ -37,14 +37,29 @@
 
     header {
       border-bottom: 2px solid var(--border-color);
-      padding-bottom: 20px;
+      padding-bottom: 24px;
       margin-bottom: 28px;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .profile-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--border-color);
+      flex-shrink: 0;
     }
 
     h1 {
       color: var(--heading-color);
       font-size: 2.25rem;
-      margin: 0 0 10px 0;
+      margin: 0 0 8px 0;
       letter-spacing: -0.02em;
     }
 
@@ -113,14 +128,26 @@
       margin-bottom: 6px;
       color: #4a5568;
     }
+
+    @media (max-width: 500px) {
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
     <header>
-      <h1>Joseph Galioto</h1>
-      <p class="bio">A driven supply chain-aspiring professional studying Supply Chain Management and French at Rutgers University.</p>
+      <div class="profile-header">
+        <img src="Headshot 1.30.25.jpg" alt="Joseph Galioto" class="profile-img">
+        <div>
+          <h1>Joseph Galioto</h1>
+          <p class="bio">A driven supply chain-aspiring professional studying Supply Chain Management and French at Rutgers University.</p>
+        </div>
+      </div>
     </header>
 
     <section>
