@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Rivera | Full Stack Developer & Open Source Contributor</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        gh: {
+                            dark: '#0d1117',
+                            card: '#161b22',
+                            border: '#30363d',
+                            green: '#238636',
+                            greenHover: '#2ea043',
+                            accent: '#58a6ff',
+                            subtle: '#8b949e',
+                            lightBg: '#f6f8fa',
+                            lightCard: '#ffffff',
+                            lightBorder: '#d0d7de'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a1a1aa;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #3f3f46;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #71717a;
+        }
+
+        /* Tooltip styling for GitHub heatmap */
+        .heatmap-cell {
+            transition: transform 0.15s ease-in-out;
+        }
+        .heatmap-cell:hover {
+            transform: scale(1.3);
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-gh-lightBg dark:bg-gh-dark text-gray-800 dark:text-gray-200 font-sans transition-colors duration-300 min-h-screen flex flex-col selection:bg-blue-500 selection:text-white">
+
+    <header class="sticky top-0 z-40 w-full border-b border-gh-lightBorder dark:border-gh-border bg-white/80 dark:bg-gh-dark/80 backdrop-blur-md transition-colors duration-300">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-2.5 font-semibold text-lg hover:opacity-80 transition-opacity">
+                <i class="fa-brands fa-github text-2xl text-gray-900 dark:text-white"></i>
+                <span class="font-mono text-sm tracking-wide text-gray-700 dark:text-gray-300">alexrivera<span class="text-gh-accent">.dev</span></span>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+                <a href="#about" class="hover:text-gh-accent transition-colors">About</a>
+                <a href="#projects" class="hover:text-gh-accent transition-colors">Projects</a>
+                <a href="#skills" class="hover:text-gh-accent transition-colors">Skills</a>
+                <a href="#activity" class="hover:text-gh-accent transition-colors">Activity</a>
+                <a href="#contact" class="hover:text-gh-accent transition-colors">Contact</a>
+            </nav>
+
+            <!-- Actions Right -->
+            <div class="flex items-center gap-3">
+                <!-- Theme Toggle Button -->
+                <button id="themeToggle" aria-label="Toggle Theme" class="p-2 rounded-lg border border-gh-lightBorder dark:border-gh-border hover:bg-gray-100 dark:hover:bg-gh-card text-gray-600 dark:text-gray-300 transition-colors">
+                    <i id="themeIcon" class="fa-solid fa-moon"></i>
+                </button>
+
+                <!-- Status indicator badge -->
+                <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span>Open for opportunities</span>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" aria-label="Open Mobile Menu" class="md:hidden p-2 rounded-lg border border-gh-lightBorder dark:border-gh-border text-gray-600 dark:text-gray-300">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-b border-gh-lightBorder dark:border-gh-border bg-white dark:bg-gh-card px-4 py-4 space-y-3">
+            <a href="#about" class="mobile-nav-link block text-sm font-medium py-1.5 hover:text-gh-accent">About</a>
+            <a href="#projects" class="mobile-nav-link block text-sm font-medium py-1.5 hover:text-gh-accent">Projects</a>
+            <a href="#skills" class="mobile-nav-link block text-sm font-medium py-1.5 hover:text-gh-accent">Skills</a>
+            <a href="#activity" class="mobile-nav-link block text-sm font-medium py-1.5 hover:text-gh-accent">Activity</a>
+            <a href="#contact" class="mobile-nav-link block text-sm font-medium py-1.5 hover:text-gh-accent">Contact</a>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <section id="about" class="pt-4">
+            <div class="p-6 sm:p-8 rounded-2xl bg-white dark:bg-gh-card border border-gh-lightBorder dark:border-gh-border shadow-sm relative overflow-hidden">
+                <!-- Decorative background grid element -->
+                <div class="absolute -right-16 -top-16 w-64 h-64 bg-gh-accent/5 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="flex flex-col md:flex-row gap-8 items-center md:items-start">
+                    <!-- Avatar Image / Placeholder -->
+                    <div class="relative group flex-shrink-0">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400" 
+                             alt="Alex Rivera Profile" 
+                             class="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover border-4 border-gh-lightBorder dark:border-gh-border shadow-md group-hover:scale-[1.02] transition-transform duration-300"
+                             onerror="this.onerror=null; this.src='https://placehold.co/160x160/161b22/ffffff?text=AR';">
+                        <span class="absolute bottom-1 right-1 p-2 bg-white dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border rounded-full text-xs shadow-md" title="GitHub Verified Developer">
+                            <i class="fa-solid fa-code text-gh-accent"></i>
+                        </span>
+                    </div>
+
+                    <!-- Developer Info -->
+                    <div class="flex-1 text-center md:text-left space-y-4">
+                        <div>
+                            <div class="flex flex-wrap items-center justify-center md:justify-start gap-3">
+                                <h1 class="text-2xl sm:text-4xl font-bold tracking-tight text-gray-900 dark:text-white">Alex Rivera</h1>
+                                <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-gray-600 dark:text-gray-400">he/him</span>
+                            </div>
+                            <p class="text-base sm:text-lg font-medium text-gh-accent mt-1">Senior Full Stack Engineer & Open Source Enthusiast</p>
+                        </div>
+
+                        <p class="text-sm sm:text-base text-gray-600 dark:text-gh-subtle leading-relaxed max-w-2xl">
+                            Building performant web applications, distributed microservices, and sleek developer tools. Passionate about TypeScript, React, Rust, and Cloud Native architecture. Currently maintaining open-source tools with over 10,000+ monthly downloads.
+                        </p>
+
+                        <!-- Meta Info Row -->
+                        <div class="flex flex-wrap justify-center md:justify-start gap-y-2 gap-x-5 text-xs sm:text-sm text-gray-600 dark:text-gh-subtle pt-1 font-mono">
+                            <span class="flex items-center gap-1.5">
+                                <i class="fa-solid fa-location-dot text-gray-400"></i> San Francisco, CA
+                            </span>
+                            <span class="flex items-center gap-1.5">
+                                <i class="fa-solid fa-link text-gray-400"></i> <a href="https://github.com" target="_blank" rel="noopener" class="hover:underline hover:text-gh-accent">alexrivera.dev</a>
+                            </span>
+                            <span class="flex items-center gap-1.5">
+                                <i class="fa-regular fa-clock text-gray-400"></i> UTC-7 (PST)
+                            </span>
+                        </div>
+
+                        <!-- CTA Buttons -->
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-3">
+                            <a href="#contact" class="px-4 py-2 text-sm font-medium rounded-lg bg-gh-green hover:bg-gh-greenHover text-white shadow-sm transition-all flex items-center gap-2">
+                                <i class="fa-regular fa-envelope"></i> Get In Touch
+                            </a>
+                            <a href="https://github.com" target="_blank" rel="noopener" class="px-4 py-2 text-sm font-medium rounded-lg border border-gh-lightBorder dark:border-gh-border bg-gray-50 dark:bg-gh-dark hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 transition-all flex items-center gap-2">
+                                <i class="fa-brands fa-github"></i> View GitHub Profile
+                            </a>
+                            <button onclick="copyToClipboard('alex@example.com')" class="px-3 py-2 text-sm font-medium rounded-lg border border-gh-lightBorder dark:border-gh-border bg-gray-50 dark:bg-gh-dark hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 transition-all" title="Copy Email">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="p-4 rounded-xl bg-white dark:bg-gh-card border border-gh-lightBorder dark:border-gh-border flex items-center gap-4">
+                <div class="p-3 rounded-lg bg-blue-500/10 text-blue-500">
+                    <i class="fa-solid fa-code-commit text-xl"></i>
+                </div>
+                <div>
+                    <div class="text-xl sm:text-2xl font-bold font-mono">1,482</div>
+                    <div class="text-xs text-gray-500 dark:text-gh-subtle">Commits (2026)</div>
+                </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-white dark:bg-gh-card border border-gh-lightBorder dark:border-gh-border flex items-center gap-4">
+                <div class="p-3 rounded-lg bg-amber-500/10 text-amber-500">
+                    <i class="fa-solid fa-star text-xl"></i>
+                </div>
+                <div>
+                    <div class="text-xl sm:text-2xl font-bold font-mono">840+</div>
+                    <div class="text-xs text-gray-500 dark:text-gh-subtle">Repository Stars</div>
+                </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-white dark:bg-gh-card border border-gh-lightBorder dark:border-gh-border flex items-center gap-4">
+                <div class="p-3 rounded-lg bg-purple-500/10 text-purple-500">
+                    <i class="fa-solid fa-code-pull-request text-xl"></i>
+                </div>
+                <div>
+                    <div class="text-xl sm:text-2xl font-bold font-mono">126</div>
+                    <div class="text-xs text-gray-500 dark:text-gh-subtle">PRs Merged</div>
+                </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-white dark:bg-gh-card border border-gh-lightBorder dark:border-gh-border flex items-center gap-4">
+                <div class="p-3 rounded-lg bg-emerald-500/10 text-emerald-500">
+                    <i class="fa-solid fa-cubes text-xl"></i>
+                </div>
+                <div>
+                    <div class="text-xl sm:text-2xl font-bold font-mono">34</div>
+                    <div class="text-xs text-gray-500 dark:text-gh-subtle">Public Repos</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gh-lightBorder dark:border-gh-border pb-4">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-regular fa-folder-open text-gh-accent"></i> Featured Repositories
+                    </h2>
+                    <p class="text-sm text-gray-500 dark:text-gh-subtle mt-0.5">Handpicked open-source applications and libraries</p>
+                </div>
+
+                <!-- Tag Filter Buttons -->
+                <div class="flex flex-wrap gap-1.5" id="projectFilters">
+                    <button data-filter="all" class="filter-btn active px-3 py-1 text-xs font-mono rounded-md border border-gh-accent bg-gh-accent/10 text-gh-accent transition-all">All</button>
+                    <button data-filter="TypeScript" class="filter-btn px-3 py-1 text-xs font-mono rounded-md border border-gh-lightBorder dark:border-gh-border text-gray-600 dark:text-gh-subtle hover:border-gh-accent transition-all">TypeScript</button>
+                    <button data-filter="React" class="filter-btn px-3 py-1 text-xs font-mono rounded-md border border-gh-lightBorder dark:border-gh-border text-gray-600 dark:text-gh-subtle hover:border-gh-accent transition-all">React</button>
+                    <button data-filter="Rust" class="filter-btn px-3 py-1 text-xs font-mono rounded-md border border-gh-lightBorder dark:border-gh-border text-gray-600 dark:text-gh-subtle hover:border-gh-accent transition-all">Rust</button>
+                    <button data-filter="Python" class="filter-btn px-3 py-1 text-xs font-mono rounded-md border border-gh-lightBorder dark:border-gh-border text-gray-600 dark:text-gh-subtle hover:border-gh-accent transition-all">Python</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="projectsGrid">
+                
+                <!-- Project Card 1 -->
+                <div class="project-card border border-gh-lightBorder dark:border-gh-border bg-white dark:bg-gh-card rounded-xl p-5 flex flex-col justify-between hover:border-gh-accent/60 transition-all duration-200 shadow-sm hover:shadow-md" data-tags="TypeScript,React,Fullstack">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between">
+                            <a href="https://github.com" target="_blank" class="text-base font-semibold text-gh-accent hover:underline flex items-center gap-2">
+                                <i class="fa-regular fa-bookmark text-gray-400"></i>
+                                <span>devflow-dashboard</span>
+                            </a>
+                            <span class="text-xs px-2 py-0.5 rounded-full border border-gh-lightBorder dark:border-gh-border text-gray-500 dark:text-gh-subtle font-mono">Public</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-gray-600 dark:text-gh-subtle leading-relaxed line-clamp-2">
+                            Real-time developer metrics aggregator built with Next.js, WebSockets, and Tailwind CSS. Provides unified code health Insights.
+                        </p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-gray-100 dark:border-gh-border/50 flex items-center justify-between text-xs text-gray-500 dark:text-gh-subtle">
+                        <div class="flex items-center gap-4 font-mono">
+                            <span class="flex items-center gap-1.5">
+                                <span class="w-3 h-3 rounded-full bg-blue-500 inline-block"></span> TypeScript
+                            </span>
+                            <button class="star-btn hover:text-amber-500 flex items-center gap-1 transition-colors" data-starred="false" data-count="342">
+                                <i class="fa-regular fa-star"></i> <span class="star-count">342</span>
+                            </button>
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-code-fork"></i> 48
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <a href="https://github.com" target="_blank" class="p-1.5 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Repo"><i class="fa-brands fa-github text-sm"></i></a>
+                            <a href="https://github.com" target="_blank" class="p-1.5 hover:text-gh-accent hover:bg-gray-700/30 rounded transition-colors" title="Live Demo"><i class="fa-solid fa-arrow-up-right-from-square text-sm"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="project-card border border-gh-lightBorder dark:border-gh-border bg-white dark:bg-gh-card rounded-xl p-5 flex flex-col justify-between hover:border-gh-accent/60 transition-all duration-200 shadow-sm hover:shadow-md" data-tags="Rust,CLI">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between">
+                            <a href="https://github.com" target="_blank" class="text-base font-semibold text-gh-accent hover:underline flex items-center gap-2">
+                                <i class="fa-regular fa-bookmark text-gray-400"></i>
+                                <span>fast-git-cleaner</span>
+                            </a>
+                            <span class="text-xs px-2 py-0.5 rounded-full border border-gh-lightBorder dark:border-gh-border text-gray-500 dark:text-gh-subtle font-mono">Public</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-gray-600 dark:text-gh-subtle leading-relaxed line-clamp-2">
+                            Blazing fast CLI tool written in Rust to safely delete stale Git branches, purge cache, and optimize local repo storage.
+                        </p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-gray-100 dark:border-gh-border/50 flex items-center justify-between text-xs text-gray-500 dark:text-gh-subtle">
+                        <div class="flex items-center gap-4 font-mono">
+                            <span class="flex items-center gap-1.5">
+                                <span class="w-3 h-3 rounded-full bg-orange-600 inline-block"></span> Rust
+                            </span>
+                            <button class="star-btn hover:text-amber-500 flex items-center gap-1 transition-colors" data-starred="false" data-count="215">
+                                <i class="fa-regular fa-star"></i> <span class="star-count">215</span>
+                            </button>
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-code-fork"></i> 19
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <a href="https://github.com" target="_blank" class="p-1.5 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Repo"><i class="fa-brands fa-github text-sm"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="project-card border border-gh-lightBorder dark:border-gh-border bg-white dark:bg-gh-card rounded-xl p-5 flex flex-col justify-between hover:border-gh-accent/60 transition-all duration-200 shadow-sm hover:shadow-md" data-tags="Python,AI">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between">
+                            <a href="https://github.com" target="_blank" class="text-base font-semibold text-gh-accent hover:underline flex items-center gap-2">
+                                <i class="fa-regular fa-bookmark text-gray-400"></i>
+                                <span>code-review-agent</span>
+                            </a>
+                            <span class="text-xs px-2 py-0.5 rounded-full border border-gh-lightBorder dark:border-gh-border text-gray-500 dark:text-gh-subtle font-mono">Public</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-gray-600 dark:text-gh-subtle leading-relaxed line-clamp-2">
+                            Automated AI pull request review bot utilizing LLMs to detect bugs, security vulnerabilities, and code style violations in GitHub Actions.
+                        </p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-gray-100 dark:border-gh-border/50 flex items-center justify-between text-xs text-gray-500 dark:text-gh-subtle">
+                        <div class="flex items-center gap-4 font-mono">
+                            <span class="flex items-center gap-1.5">
+                                <span class="w-3 h-3 rounded-full bg-sky-500 inline-block"></span> Python
+                            </span>
+                            <button class="star-btn hover:text-amber-500 flex items-center gap-1 transition-colors" data-starred="false" data-count="189">
+                                <i class="fa-regular fa-star"></i> <span class="star-count">189</span>
+                            </button>
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-code-fork"></i> 32
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <a href="https://github.com" target="_blank" class="p-1.5 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Repo"><i class="fa-brands fa-github text-sm"></i></a>
+                            <a href="https://github.com" target="_blank" class="p-1.5 hover:text-gh-accent hover:bg-gray-700/30 rounded transition-colors" title="Live Demo"><i class="fa-solid fa-arrow-up-right-from-square text-sm"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 4 -->
+                <div class="project-card border border-gh-lightBorder dark:border-gh-border bg-white dark:bg-gh-card rounded-xl p-5 flex flex-col justify-between hover:border-gh-accent/60 transition-all duration-200 shadow-sm hover:shadow-md" data-tags="TypeScript,React">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between">
+                            <a href="https://github.com" target="_blank" class="text-base font-semibold text-gh-accent hover:underline flex items-center gap-2">
+                                <i class="fa-regular fa-bookmark text-gray-400"></i>
+                                <span>component-ui-kit</span>
+                            </a>
+                            <span class="text-xs px-2 py-0.5 rounded-full border border-gh-lightBorder dark:border-gh-border text-gray-500 dark:text-gh-subtle font-mono">Public</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-gray-600 dark:text-gh-subtle leading-relaxed line-clamp-2">
+                            Accessible, lightweight, dark-mode ready React component library styled with Tailwind CSS for rapid prototyping.
+                        </p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-gray-100 dark:border-gh-border/50 flex items-center justify-between text-xs text-gray-500 dark:text-gh-subtle">
+                        <div class="flex items-center gap-4 font-mono">
+                            <span class="flex items-center gap-1.5">
+                                <span class="w-3 h-3 rounded-full bg-cyan-400 inline-block"></span> React
+                            </span>
+                            <button class="star-btn hover:text-amber-500 flex items-center gap-1 transition-colors" data-starred="false" data-count="94">
+                                <i class="fa-regular fa-star"></i> <span class="star-count">94</span>
+                            </button>
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-code-fork"></i> 12
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <a href="https://github.com" target="_blank" class="p-1.5 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Repo"><i class="fa-brands fa-github text-sm"></i></a>
+                            <a href="https://github.com" target="_blank" class="p-1.5 hover:text-gh-accent hover:bg-gray-700/30 rounded transition-colors" title="Live Demo"><i class="fa-solid fa-arrow-up-right-from-square text-sm"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="skills" class="space-y-6">
+            <div class="border-b border-gh-lightBorder dark:border-gh-border pb-4">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group text-gh-accent"></i> Technical Stack & Tools
+                </h2>
+                <p class="text-sm text-gray-500 dark:text-gh-subtle mt-0.5">Technologies I rely on daily to ship high quality software</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Frontend skills -->
+                <div class="p-5 rounded-xl border border-gh-lightBorder dark:border-gh-border bg-white dark:bg-gh-card space-y-3">
+                    <h3 class="text-sm font-semibold font-mono text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-desktop text-blue-400"></i> Frontend
+                    </h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">TypeScript</span>
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">React / Next.js</span>
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">Tailwind CSS</span>
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">Vue.js</span>
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">HTML5 / CSS3</span>
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">WebAssembly</span>
+                    </div>
+                </div>
+
+                <!-- Backend skills -->
+                <div class="p-5 rounded-xl border border-gh-lightBorder dark:border-gh-border bg-white dark:bg-gh-card space-y-3">
+                    <h3 class="text-sm font-semibold font-mono text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-server text-emerald-400"></i> Backend & DB
+                    </h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">Node.js</span>
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">Rust</span>
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">Python / FastAPI</span>
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">PostgreSQL</span>
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">Redis</span>
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">GraphQL</span>
+                    </div>
+                </div>
+
+                <!-- DevOps & Tools -->
+                <div class="p-5 rounded-xl border border-gh-lightBorder dark:border-gh-border bg-white dark:bg-gh-card space-y-3">
+                    <h3 class="text-sm font-semibold font-mono text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-gears text-purple-400"></i> Infrastructure & Tools
+                    </h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">Git & GitHub</span>
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">Docker</span>
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">GitHub Actions</span>
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">AWS / Vercel</span>
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">Linux</span>
+                        <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gh-dark border border-gh-lightBorder dark:border-gh-border text-xs font-mono">Jest / Vitest</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="activity" class="space-y-6">
+            <div class="border-b border-gh-lightBorder dark:border-gh-border pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-simple text-gh-accent"></i> Contribution Activity
+                    </h2>
+                    <p class="text-sm text-gray-500 dark:text-gh-subtle mt-0.5">1,482 contributions in the last year</p>
+                </div>
+                <div class="flex items-center gap-1.5 text-xs text-gray-500 font-mono">
+                    <span>Less</span>
+                    <span class="w-2.5 h-2.5 rounded-sm bg-gray-200 dark:bg-[#161b22]"></span>
+                    <span class="w-2.5 h-2.5 rounded-sm bg-emerald-900"></span>
+                    <span class="w-2.5 h-2.5 rounded-sm bg-emerald-700"></span>
+                    <span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span>
+                    <span class="w-2.5 h-2.5 rounded-sm bg-emerald-300"></span>
+                    <span>More</span>
+                </div>
+            </div>
+
+            <!-- Heatmap Canvas / Procedural Container -->
+            <div class="p-5 rounded-xl border border-gh-lightBorder dark:border-gh-border bg-white dark:bg-gh-card overflow-x-auto shadow-sm">
+                <div id="heatmapGrid" class="flex gap-1.5 min-w-[720px] justify-between py-2">
+                    <!-- Javascript will render 52 weeks here dynamically -->
+                </div>
+            </div>
+
+            <!-- Activity Ticker -->
+            <div class="p-4 rounded-xl border border-gh-lightBorder dark:border-gh-border bg-white dark:bg-gh-card space-y-3">
+                <h3 class="text-xs font-semibold font-mono text-gray-500 dark:text-gh-subtle uppercase tracking-wider">Recent Activity Log</h3>
+                <ul class="space-y-2.5 text-xs sm:text-sm">
+                    <li class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                        <i class="fa-solid fa-code-commit text-emerald-500 font-mono"></i>
+                        <span class="flex-1 font-mono truncate">pushed to main in <a href="#" class="text-gh-accent hover:underline">alexrivera/devflow-dashboard</a></span>
+                        <span class="text-xs text-gray-400 font-mono">2 hours ago</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                        <i class="fa-solid fa-code-pull-request text-purple-400 font-mono"></i>
+                        <span class="flex-1 font-mono truncate">opened PR #14 in <a href="#" class="text-gh-accent hover:underline">facebook/react</a></span>
+                        <span class="text-xs text-gray-400 font-mono">yesterday</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                        <i class="fa-regular fa-circle-dot text-amber-500 font-mono"></i>
+                        <span class="flex-1 font-mono truncate">closed issue #82 in <a href="#" class="text-gh-accent hover:underline">alexrivera/fast-git-cleaner</a></span>
+                        <span class="text-xs text-gray-400 font-mono">3 days ago</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="contact" class="space-y-6">
+            <div class="border-b border-gh-lightBorder dark:border-gh-border pb-4">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-regular fa-paper-plane text-gh-accent"></i> Let's Connect
+                </h2>
+                <p class="text-sm text-gray-500 dark:text-gh-subtle mt-0.5">Have a project in mind or open source collaboration? Send me a message!</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Left: Quick Links -->
+                <div class="space-y-4">
+                    <p class="text-sm text-gray-600 dark:text-gh-subtle leading-relaxed">
+                        I am currently open to consulting engagements, full-time engineering roles, and open-source collaborations. Feel free to reach out via email or any social channels.
+                    </p>
+
+                    <div class="space-y-3 pt-2">
+                        <a href="mailto:alex@example.com" class="flex items-center gap-3 p-3 rounded-lg border border-gh-lightBorder dark:border-gh-border bg-white dark:bg-gh-card hover:border-gh-accent transition-all group">
+                            <div class="p-2 rounded bg-blue-500/10 text-blue-500 group-hover:scale-110 transition-transform">
+                                <i class="fa-regular fa-envelope text-lg"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs text-gray-400 font-mono">Direct Email</div>
+                                <div class="text-sm font-medium text-gray-800 dark:text-gray-200">alex@example.com</div>
+                            </div>
+                        </a>
+
+                        <a href="https://github.com" target="_blank" class="flex items-center gap-3 p-3 rounded-lg border border-gh-lightBorder dark:border-gh-border bg-white dark:bg-gh-card hover:border-gh-accent transition-all group">
+                            <div class="p-2 rounded bg-purple-500/10 text-purple-400 group-hover:scale-110 transition-transform">
+                                <i class="fa-brands fa-github text-lg"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs text-gray-400 font-mono">GitHub Profile</div>
+                                <div class="text-sm font-medium text-gray-800 dark:text-gray-200">@alexrivera-dev</div>
+                            </div>
+                        </a>
+
+                        <a href="https://linkedin.com" target="_blank" class="flex items-center gap-3 p-3 rounded-lg border border-gh-lightBorder dark:border-gh-border bg-white dark:bg-gh-card hover:border-gh-accent transition-all group">
+                            <div class="p-2 rounded bg-sky-500/10 text-sky-500 group-hover:scale-110 transition-transform">
+                                <i class="fa-brands fa-linkedin text-lg"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs text-gray-400 font-mono">LinkedIn</div>
+                                <div class="text-sm font-medium text-gray-800 dark:text-gray-200">in/alexrivera-dev</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right: Interactive Form -->
+                <form id="contactForm" class="p-6 rounded-xl border border-gh-lightBorder dark:border-gh-border bg-white dark:bg-gh-card space-y-4 shadow-sm">
+                    <div>
+                        <label for="contactName" class="block text-xs font-mono font-medium text-gray-700 dark:text-gray-300 mb-1">Your Name</label>
+                        <input type="text" id="contactName" required placeholder="Jane Doe" class="w-full px-3 py-2 rounded-lg border border-gh-lightBorder dark:border-gh-border bg-gray-50 dark:bg-gh-dark text-sm focus:outline-none focus:border-gh-accent transition-colors">
+                    </div>
+
+                    <div>
+                        <label for="contactEmail" class="block text-xs font-mono font-medium text-gray-700 dark:text-gray-300 mb-1">Your Email</label>
+                        <input type="email" id="contactEmail" required placeholder="jane@company.com" class="w-full px-3 py-2 rounded-lg border border-gh-lightBorder dark:border-gh-border bg-gray-50 dark:bg-gh-dark text-sm focus:outline-none focus:border-gh-accent transition-colors">
+                    </div>
+
+                    <div>
+                        <label for="contactMessage" class="block text-xs font-mono font-medium text-gray-700 dark:text-gray-300 mb-1">Message</label>
+                        <textarea id="contactMessage" rows="4" required placeholder="Hi Alex, I'd like to discuss a potential project..." class="w-full px-3 py-2 rounded-lg border border-gh-lightBorder dark:border-gh-border bg-gray-50 dark:bg-gh-dark text-sm focus:outline-none focus:border-gh-accent transition-colors resize-none"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-2.5 rounded-lg bg-gh-green hover:bg-gh-greenHover text-white text-sm font-medium shadow-sm transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-12 border-t border-gh-lightBorder dark:border-gh-border bg-white dark:bg-gh-card py-6 transition-colors duration-300">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-gray-500 dark:text-gh-subtle">
+            <div class="flex items-center gap-2">
+                <i class="fa-brands fa-github text-base"></i>
+                <span>Designed & hosted on <strong>GitHub Pages</strong></span>
+            </div>
+            <div>
+                <span>© <span id="yearSpan">2026</span> Alex Rivera. Built with HTML, Tailwind & JS.</span>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-4 py-3 rounded-lg shadow-xl flex items-center gap-3 text-sm font-medium">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 dark:text-emerald-600"></i>
+        <span id="toastMessage">Action completed</span>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+
+        // Check stored theme or fallback to dark
+        const storedTheme = localStorage.getItem('portfolio-theme') || 'dark';
+        if (storedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+            themeIcon.className = 'fa-solid fa-sun';
+        } else {
+            document.documentElement.classList.remove('dark');
+            themeIcon.className = 'fa-solid fa-moon';
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('portfolio-theme', isDark ? 'dark' : 'light');
+            themeIcon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+            showToast(isDark ? 'Switched to Dark Mode' : 'Switched to Light Mode');
+        });
+
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        function renderHeatmap() {
+            const container = document.getElementById('heatmapGrid');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const weeks = 48; // Total week columns for responsiveness
+            const daysPerWeek = 7;
+
+            // Generate commit density simulation
+            for (let w = 0; w < weeks; w++) {
+                const weekCol = document.createElement('div');
+                weekCol.className = 'flex flex-col gap-1';
+
+                for (let d = 0; d < daysPerWeek; d++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'w-3 h-3 rounded-sm heatmap-cell';
+                    
+                    // Random weight to simulate real GitHub contributions
+                    const rand = Math.random();
+                    let colorClass = 'bg-gray-100 dark:bg-[#161b22]'; // level 0
+                    let commits = 0;
+
+                    if (rand > 0.85) {
+                        colorClass = 'bg-emerald-400 dark:bg-emerald-400';
+                        commits = Math.floor(Math.random() * 5) + 10;
+                    } else if (rand > 0.65) {
+                        colorClass = 'bg-emerald-500 dark:bg-emerald-600';
+                        commits = Math.floor(Math.random() * 4) + 6;
+                    } else if (rand > 0.45) {
+                        colorClass = 'bg-emerald-700 dark:bg-emerald-800';
+                        commits = Math.floor(Math.random() * 3) + 3;
+                    } else if (rand > 0.25) {
+                        colorClass = 'bg-emerald-900 dark:bg-emerald-950';
+                        commits = Math.floor(Math.random() * 2) + 1;
+                    }
+
+                    cell.className += ' ' + colorClass;
+                    cell.title = `${commits} contributions`;
+                    weekCol.appendChild(cell);
+                }
+                container.appendChild(weekCol);
+            }
+        }
+        renderHeatmap();
+
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('active', 'border-gh-accent', 'bg-gh-accent/10', 'text-gh-accent');
+                    b.classList.add('border-gh-lightBorder', 'dark:border-gh-border', 'text-gray-600', 'dark:text-gh-subtle');
+                });
+
+                btn.classList.add('active', 'border-gh-accent', 'bg-gh-accent/10', 'text-gh-accent');
+                btn.classList.remove('border-gh-lightBorder', 'dark:border-gh-border', 'text-gray-600', 'dark:text-gh-subtle');
+
+                const filter = btn.getAttribute('data-filter');
+
+                projectCards.forEach(card => {
+                    const tags = card.getAttribute('data-tags').split(',');
+                    if (filter === 'all' || tags.includes(filter)) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        document.querySelectorAll('.star-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const isStarred = button.getAttribute('data-starred') === 'true';
+                const countSpan = button.querySelector('.star-count');
+                const starIcon = button.querySelector('i');
+                let count = parseInt(button.getAttribute('data-count'), 10);
+
+                if (isStarred) {
+                    count--;
+                    button.setAttribute('data-starred', 'false');
+                    starIcon.className = 'fa-regular fa-star';
+                    button.classList.remove('text-amber-500');
+                    showToast('Removed star');
+                } else {
+                    count++;
+                    button.setAttribute('data-starred', 'true');
+                    starIcon.className = 'fa-solid fa-star text-amber-500';
+                    button.classList.add('text-amber-500');
+                    showToast('Starred repository!');
+                }
+
+                button.setAttribute('data-count', count);
+                countSpan.textContent = count;
+            });
+        });
+
+        function copyToClipboard(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text);
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            }
+            showToast('Email copied to clipboard!');
+        }
+
+        // Contact Form Submission Handler
+        const contactForm = document.getElementById('contactForm');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showToast('Message sent successfully!');
+            contactForm.reset();
+        });
+
+        // Toast Notification System
+        let toastTimeout;
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Dynamic Year Update
+        document.getElementById('yearSpan').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
