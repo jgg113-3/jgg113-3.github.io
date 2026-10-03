@@ -120,13 +120,35 @@
     }
 
     .project ul {
-      margin: 0;
+      margin: 0 0 16px 0;
       padding-left: 20px;
     }
 
     .project li {
       margin-bottom: 6px;
       color: #4a5568;
+    }
+
+    /* Responsive 16:9 Google Slides Container */
+    .slides-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      height: 0;
+      margin-top: 16px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .slides-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
     }
 
     @media (max-width: 500px) {
@@ -170,6 +192,16 @@
           <li>Increased products held per vending position, decreasing labor time by 20% and reducing stock-out risk by 15%.</li>
           <li>Captured $25,000 through labor savings, lean inventories, and lower stockout risk.</li>
         </ul>
+
+        <!-- Embedded Google Slides -->
+        <div class="slides-container">
+          <iframe 
+            src="https://docs.google.com/presentation/d/16xua6YcVE5jNYRzjr70z7t-JKBZ8TLDf7aOyw40T6xA/embed?start=false&loop=false&delayms=3000" 
+            allowfullscreen="true" 
+            mozallowfullscreen="true" 
+            webkitallowfullscreen="true">
+          </iframe>
+        </div>
       </div>
 
       <div class="project">
